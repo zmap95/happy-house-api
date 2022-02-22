@@ -25,4 +25,8 @@ Route::group(['prefix' => 'v1',], function () {
             Route::get('/profile', [\App\Http\Controllers\API\V1\AuthController::class, 'profile']);
         });
     });
+
+    Route::group(['middleware' => 'auth:sanctum'], function () {
+        Route::post('/upload', [\App\Http\Controllers\API\V1\UploadController::class, 'upload']);
+    });
 });
