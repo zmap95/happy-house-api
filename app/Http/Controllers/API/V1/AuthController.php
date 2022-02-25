@@ -129,13 +129,21 @@ class AuthController extends Controller
     public function register(UserRegisterRequest $request) {
         DB::beginTransaction();
         try {
-            $this->userService->register($request->validated());
+            $user = $this->userService->register($request->validated());
 
             DB::commit();
+            $token = $user->createToken('token-name')->plainTextToken;
+
+            $user->forceFill([
+                'api_token' => $token,
+            ])->save();
 
             $response = (new ResponseData())->setStatus(true)
-                ->setMessage("Đăng ký thành công, đang đợi admin phê duyệt")
-                ->setData([])->getBodyResponse();
+                ->setMessage("Đăng ký thành công")
+                ->setData([
+                    'token' => $token,
+                    'user'  => new UserResource($user)
+                ])->getBodyResponse();
 
             return response()->json($response);
         } catch (\Exception $exception) {

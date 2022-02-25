@@ -26,7 +26,7 @@ class User extends Model implements Transformable
      */
     protected $fillable = [
         'name', 'phone',  'address', 'email', 'invite_code', 'status',
-        'email_verified_at', 'active_at', 'api_token'
+        'email_verified_at', 'active_at', 'api_token', 'password'
     ];
 
     protected static function newFactory()

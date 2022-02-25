@@ -35,7 +35,6 @@ class UserService extends BaseService {
     public function changePassword(string $currentPassword, string $newPassword) {
         if (!Hash::check($currentPassword, auth()->user()->password)) {
             throw ValidationException::withMessages(['current_password' => 'Mật khẩu hiện tại không đúng']);
-
         }
 
         $this->repository->update(['password' => bcrypt($newPassword)], auth()->user()->id);
