@@ -8,6 +8,7 @@ use App\Http\Requests\UserChangePasswordRequest;
 use App\Http\Requests\UserForgotPasswordRequest;
 use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserRegisterRequest;
+use App\Http\Requests\UserResetPasswordRequest;
 use App\Http\Resources\UserResource;
 use App\Services\UserService;
 use Illuminate\Support\Facades\DB;
@@ -187,12 +188,60 @@ class AuthController extends Controller
      * )
      */
     public function forgotPassword(UserForgotPasswordRequest $request) {
-        $password = $this->userService->forgotPassword($request->get('phone'));
+        $this->userService->forgotPassword($request->get('email'));
 
         $response = (new ResponseData())->setStatus(true)
             ->setMessage("Hệ thống đã gửi mật khẩu mới đến số điện thoại đăng ký")
-            ->setData(['password' => $password])
             ->getBodyResponse();
+
+        return response()->json($response);
+    }
+
+    /**
+     * @OA\Post(
+     *      path="/user/reset-password",
+     *      operationId="reset-password",
+     *      tags={"[Chủ nhà][Authentication]"},
+     *      summary="User reset password",
+     *      description="Returns status reset password",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(ref="#/components/schemas/UserResetPasswordRequest")
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *       ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     * )
+     */
+    public function resetPassword(UserResetPasswordRequest $request) {
+        $this->userService->resetPassword($request->validated());
+        $user = $this->userService->findFirst(['email' => $request->get('email')]);
+
+        $token = $user->createToken('token-name')->plainTextToken;
+
+        $user->forceFill([
+            'api_token' => $token,
+        ])->save();
+
+        $response = (new ResponseData())->setStatus(true)
+            ->setMessage("Đổi mật khẩu thành công")
+            ->setData([
+                'token' => $token,
+                'user'  => new UserResource($user)
+            ])->getBodyResponse();
 
         return response()->json($response);
     }

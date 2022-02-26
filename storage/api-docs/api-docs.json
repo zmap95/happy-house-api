@@ -141,6 +141,40 @@
                 }
             }
         },
+        "/user/reset-password": {
+            "post": {
+                "tags": [
+                    "[Chủ nhà][Authentication]"
+                ],
+                "summary": "User reset password",
+                "description": "Returns status reset password",
+                "operationId": "reset-password",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserResetPasswordRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
         "/user/change-password": {
             "put": {
                 "tags": [
@@ -357,6 +391,39 @@
                         "description": "invite_code of user",
                         "type": "string",
                         "example": "nmdf9g34nf"
+                    }
+                },
+                "type": "object"
+            },
+            "UserResetPasswordRequest": {
+                "title": "Reset password request",
+                "description": "Reset password body data",
+                "required": [
+                    "email",
+                    "token",
+                    "password",
+                    "password_confirmed"
+                ],
+                "properties": {
+                    "email": {
+                        "title": "email",
+                        "description": "email of user",
+                        "example": "user@gmail.com"
+                    },
+                    "token": {
+                        "title": "token",
+                        "description": "token reset",
+                        "example": "efgjej3$deeddd"
+                    },
+                    "password": {
+                        "title": "password",
+                        "description": "new password",
+                        "example": "password"
+                    },
+                    "password_confirmed": {
+                        "title": "password_confirmed",
+                        "description": "password confirmed",
+                        "example": "password"
                     }
                 },
                 "type": "object"

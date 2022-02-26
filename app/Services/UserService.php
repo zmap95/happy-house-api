@@ -2,9 +2,13 @@
 
 namespace App\Services;
 
+use App\Entities\User;
 use App\Repositories\UserRepositoryEloquent;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Auth\Events\PasswordReset;
 
 class UserService extends BaseService {
 
@@ -24,12 +28,41 @@ class UserService extends BaseService {
         return $this->repository->create($dataRegister);
     }
 
-    public function forgotPassword($phone) {
-        $user = $this->repository->findFirst(['phone' => $phone]);
-        $password = $this->generateRandomString();
-        $this->repository->update(['password' => bcrypt($password)], $user->id);
+    public function forgotPassword($email) {
+        $user = $this->repository->findFirst(['email' => $email, 'status' => User::ACTIVE]);
 
-        return $password;
+        if (!$user) {
+            throw ValidationException::withMessages(['email' => "Không tìm thấy người dùng với email yêu cầu"]);
+        }
+
+        $status = Password::sendResetLink(['email' => $email]);
+
+        if ($status !== Password::RESET_LINK_SENT) {
+            throw ValidationException::withMessages(['email' => __($status)]);
+        }
+
+        return true;
+    }
+
+    public function resetPassword(array $resetData) {
+        $status = Password::reset(
+            $resetData,
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password)
+                ])->setRememberToken(Str::random(60));
+
+                $user->save();
+
+                event(new PasswordReset($user));
+            }
+        );
+
+        if ($status !== Password::PASSWORD_RESET) {
+            throw ValidationException::withMessages(['password' => 'Thông tin thiết lập lại mật khẩu không đúng, vui lòng thử lại']);
+        }
+
+        return true;
     }
 
     public function changePassword(string $currentPassword, string $newPassword) {

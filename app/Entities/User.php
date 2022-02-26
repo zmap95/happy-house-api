@@ -18,7 +18,8 @@ use Prettus\Repository\Traits\TransformableTrait;
 class User extends Model implements Transformable
 {
     use  HasFactory, Notifiable, TransformableTrait, HasApiTokens;
-
+    const ACTIVE = 'active';
+    const INACTIVE = 'inactive';
     /**
      * The attributes that are mass assignable.
      *
