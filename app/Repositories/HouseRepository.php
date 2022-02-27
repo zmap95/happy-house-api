@@ -11,5 +11,5 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 interface HouseRepository extends RepositoryInterface
 {
-    //
+    public function getByUser(int $userId, array $searchCondition = [], array $with = []);
 }

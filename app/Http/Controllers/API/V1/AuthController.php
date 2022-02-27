@@ -191,7 +191,7 @@ class AuthController extends Controller
         $this->userService->forgotPassword($request->get('email'));
 
         $response = (new ResponseData())->setStatus(true)
-            ->setMessage("Hệ thống đã gửi mật khẩu mới đến số điện thoại đăng ký")
+            ->setMessage("Hệ thống đã gửi đường dẫn đổi mật khẩu đến email đăng ký")
             ->getBodyResponse();
 
         return response()->json($response);

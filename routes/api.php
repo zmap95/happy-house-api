@@ -24,10 +24,16 @@ Route::group(['prefix' => 'v1',], function () {
         Route::group(['middleware' => 'auth:sanctum'], function () {
             Route::put('/change-password', [\App\Http\Controllers\API\V1\AuthController::class, 'changePassword']);
             Route::get('/profile', [\App\Http\Controllers\API\V1\AuthController::class, 'profile']);
+
+            Route::group(['prefix' => 'houses'], function () {
+                Route::get('/', [\App\Http\Controllers\API\V1\User\HouseController::class, 'index']);
+            });
         });
     });
 
     Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('/upload', [\App\Http\Controllers\API\V1\UploadController::class, 'upload']);
+        Route::post('/upload-multiple', [\App\Http\Controllers\API\V1\UploadController::class, 'uploadMultiple']);
+
     });
 });

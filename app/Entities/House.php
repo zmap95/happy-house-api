@@ -45,4 +45,34 @@ class House extends Model implements Transformable
     {
         return HouseFactory::new();
     }
+
+    public function province()
+    {
+        return $this->belongsTo(Province::class);
+    }
+
+    public function district()
+    {
+        return $this->belongsTo(District::class);
+    }
+
+    public function commune()
+    {
+        return $this->belongsTo(Commune::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function type()
+    {
+        return $this->belongsTo(HouseType::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(HouseCategory::class);
+    }
 }
