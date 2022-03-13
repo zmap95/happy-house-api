@@ -30,6 +30,9 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(\App\Repositories\HouseCategoryRepository::class, \App\Repositories\HouseCategoryRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\HouseTypeRepository::class, \App\Repositories\HouseTypeRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\HouseUtilityRepository::class, \App\Repositories\HouseUtilityRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\ContractRepository::class, \App\Repositories\ContractRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\HouseFeeRepository::class, \App\Repositories\HouseFeeRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\FeeCategoryRepository::class, \App\Repositories\FeeCategoryRepositoryEloquent::class);
         //:end-bindings:
     }
 }
