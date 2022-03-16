@@ -95,9 +95,15 @@ class UpdateRoomRequest extends FormRequest
 
     /**
      * @OA\Property(
-     *     property="utilities",
+     *     property="amenities",
      *     description="Các tiện ích của phòng(có thẻ để trống)",
      *     @OA\Items(
+     *        @OA\Property(
+     *              property="id",
+     *              type="integer",
+     *              description="Id tiện ích",
+     *              example="1"
+     *        ),
      *        @OA\Property(
      *              property="name",
      *              type="string",
@@ -108,18 +114,18 @@ class UpdateRoomRequest extends FormRequest
      *              property="icon",
      *              type="string",
      *              description="icon tiện ích",
-     *              example="{$file} (Hãy cho tôi file)"
+     *              example="{class} (fontawesome)"
      *        ),
      *
      *     ),
      * )
      * @var array
      */
-    private $utilities;
+    private $amenities;
 
     /**
      * @OA\Property(
-     *     property="newUtilities",
+     *     property="newAmenities",
      *     type="array",
      *     description="thêm các tiện ích của phòng nếu nó chưa nằm trong danh sách chọn (có thể null)",
      *     @OA\Items(
@@ -133,7 +139,7 @@ class UpdateRoomRequest extends FormRequest
      *              property="icon",
      *              type="string",
      *              description="icon tiện ích",
-     *              example="{$file} (Hãy cho tôi file)"
+     *              example="{class} (fontawesome)"
      *        ),
      *
      *     ),
@@ -143,7 +149,7 @@ class UpdateRoomRequest extends FormRequest
      * )
      * @var array
      */
-    private $newUtilities;
+    private $newAmenities;
 
     /**
      * @OA\Property(
@@ -187,8 +193,8 @@ class UpdateRoomRequest extends FormRequest
             'acreage' => 'bail:required:numeric',
             'amount_of_people' => 'bail|required:integer',
             'deposit' => 'bail:required:numeric',
-            'utilities' => 'sometimes|array',
-            'newUtilities' => 'sometimes|array',
+            'amenities' => 'sometimes|array',
+            'newAmenities' => 'sometimes|array',
             'room_pictures' => 'sometimes|array'
         ];
     }

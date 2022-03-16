@@ -13,5 +13,4 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 interface RoomAmenityRepository extends RepositoryInterface
 {
-    public function findIdAmenityByRoom(int $roomId);
 }

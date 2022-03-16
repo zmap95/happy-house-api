@@ -34,13 +34,4 @@ class RoomPictureRepositoryEloquent extends BaseEloquent implements RoomPictureR
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
-
-    public function findPictureByRoom(int $roomId)
-    {
-        $this->applyCriteria();
-        $this->applyScope();
-        $model = $this->model->where('room_id', $roomId)->pluck('image');
-
-        return $this->parserResult($model);
-    }
 }

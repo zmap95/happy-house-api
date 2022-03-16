@@ -25,49 +25,24 @@ class RoomService extends BaseService
         $data           = collect($data);
         $userId         = \auth()->user()->id;
         $data->put('user_id', $userId);
-        $utilities      = $data->pull('utilities', []);
-        $newUtilities   = $data->pull('newUtilities', []);
+        $utilities      = $data->pull('amenities', []);
+        $newUtilities   = $data->pull('newAmenities', []);
         $roomPictures   = $data->pull('room_pictures', []);
         $houseId        = $data->get('house_id');
         $data           = $data->toArray();
         $model          = $this->repository->create($data);
-        $newUtilityIds     = [];
-
+        $utilities      = array_merge($utilities, $newUtilities);
+        $roomAmenities  = [];
         if (!empty($utilities)) {
 
-            $folder = 'house-' . $houseId;
-            $houseAmenityRepository = app(HouseAmenityRepository::class);
-            $utilitiesOk = [];
-            foreach ($utilities as $key => $utility) {
-                $utilitiesOk['house_id'] = $houseId;
-                $utilitiesOk['name'] = $utility['name'];
-                $utilitiesOk['icon'] = $this->uploadServive->copy($folder, $utility['icon']);
-                $newUtilityIds[] = $houseAmenityRepository->updateOrCreate($utilitiesOk)->id;
-            }
-         }
-
-        if (!empty($newUtilities)) {
-
-            $folder = 'house-' . $houseId;
-            $houseAmenityRepository = app(HouseAmenityRepository::class);
-            $utilitiesOk = [];
-            foreach ($newUtilities as $key => $utility) {
-                $utilitiesOk['house_id'] = $houseId;
-                $utilitiesOk['name'] = $utility['name'];
-                $utilitiesOk['icon'] = $this->uploadServive->realUpload($folder, $utility['icon']);
-                $newUtilityIds[] = $houseAmenityRepository->updateOrCreate($utilitiesOk)->id;
-
-            }
-        }
-
-        if (!empty($newUtilityIds)) {
-
             $roomAmenityRepository  = app(RoomAmenityRepository::class);
-            $roomAmenities = [];
-            foreach ($newUtilityIds as $key => $item) {
-                $roomAmenities[$key]['house_utility_id'] = $item;
+            $roomAmenitiesOk = [];
+            foreach ($utilities as $key => $utility) {
+                $roomAmenitiesOk[$key]['room_id'] = $model->id;
+                $roomAmenitiesOk[$key]['name'] = $utility['name'];
+                $roomAmenitiesOk[$key]['icon'] = $utility['icon'];
             }
-            $roomAmenityRepository->createMany($model, $roomAmenities, 'amenities');
+            $roomAmenities = $roomAmenityRepository->createMany($model, $roomAmenitiesOk, 'amenities');
         }
 
         $roomImageResult = [];
@@ -83,7 +58,7 @@ class RoomService extends BaseService
 
         return [
             'room' => $model,
-            'utilities' => $newUtilityIds,
+            'utilities' => $roomAmenities,
             'roomImage' => $roomImageResult
         ];
 
@@ -94,65 +69,47 @@ class RoomService extends BaseService
         $data           = collect($data);
         $userId         = \auth()->user()->id;
         $data->put('user_id', $userId);
-        $utilities      = $data->pull('utilities', []);
-        $newUtilities   = $data->pull('newUtilities', []);
+        $utilities      = $data->pull('amenities', []);
+        $newUtilities   = $data->pull('newAmenities', []);
         $roomPictures   = $data->pull('room_pictures', []);
         $houseId        = $data->get('house_id');
         $data           = $data->toArray();
         $model          = $this->repository->update($data, $id);
-        $newUtilityIds     = [];
-
-        if (!empty($utilities)) {
-
-            $folder = 'house-' . $houseId;
-            $houseAmenityRepository = app(HouseAmenityRepository::class);
-            $utilitiesOk = [];
-
-            foreach ($utilities as $key => $utility) {
-
-                $utilitiesOk['house_id'] = $houseId;
-                $utilitiesOk['name'] = $utility['name'];
-                $utilitiesOk['icon'] = $this->uploadServive->copy($folder, $utility['icon']);
-                $newUtilityIds[] = $houseAmenityRepository->updateOrCreate($utilitiesOk)->id;
-            }
-        }
-
-        if (!empty($newUtilities)) {
-
-            $folder = 'house-' . $houseId;
-            $houseAmenityRepository = app(HouseAmenityRepository::class);
-            $utilitiesOk = [];
-            foreach ($newUtilities as $key => $utility) {
-                $utilitiesOk['house_id'] = $houseId;
-                $utilitiesOk['name'] = $utility['name'];
-                $utilitiesOk['icon'] = $this->uploadServive->realUpload($folder, $utility['icon']);
-                $newUtilityIds[] = $houseAmenityRepository->updateOrCreate($utilitiesOk)->id;
-
-            }
-        }
 
         $roomAmenityRepository = app(RoomAmenityRepository::class);
-        $oldUtilityId = $roomAmenityRepository->findIdAmenityByRoom($id);
-
-        if (!empty($newUtilityIds)) {
+        $oldRoomAmenity = $roomAmenityRepository->findWhere(['room_id' => $id])->pluck('id');
+        $utilitieIds   = array_column($utilities, 'id');
+        $utilities      = array_merge($utilities, $newUtilities);
+        $roomAmenities = [];
+        if (!empty($utilities)) {
 
             $utilitiesOk = [];
-            $roomUtilityDel = $oldUtilityId->diff($newUtilityIds)->toArray();
-            $roomAmenityRepository->deleteWhere([['house_utility_id', 'IN', $roomUtilityDel], ['room_id', '=', $id]]);
+            $roomUtilityDel = $oldRoomAmenity->diff($utilitieIds)->push(0)->toArray();
+            $roomAmenityRepository->deleteWhere([['id', 'IN', [$roomUtilityDel]]]);
+            foreach ($utilities as $key => $utility) {
 
-            foreach ($newUtilityIds as $key => $utility) {
+                if (!isset($utility['id'])) {
+                    $utilitiesOk['room_id'] = $id;
+                    $utilitiesOk['name'] = $utility['name'];
+                    $utilitiesOk['icon'] = $utility['icon'];
+                    $roomAmenities[] = $roomAmenityRepository->create($utilitiesOk);
+                }else{
+                    if (!in_array($utility['id'], $utilitieIds)) {
+                        $utilitiesOk['room_id'] = $id;
+                        $utilitiesOk['name'] = $utility['name'];
+                        $utilitiesOk['icon'] = $utility['icon'];
+                        $roomAmenities[] = $roomAmenityRepository->create($utilitiesOk);
+                    }
+                }
 
-                $utilitiesOk['room_id'] = $model->id;
-                $utilitiesOk['house_utility_id'] = $utility;
-                $roomAmenityRepository->updateOrCreate($utilitiesOk);
             }
 
         }else {
-            $roomAmenityRepository->deleteWhere([['house_utility_id', 'IN', $oldUtilityId->toAray()], ['room_id', '=', $id]]);
+            $roomAmenityRepository->deleteWhere( ['room_id' => $id]);
         }
 
         $roomPictureRepository  = app(RoomPictureRepository::class);
-        $oldPicture = $roomPictureRepository->findPictureByRoom($id);
+        $oldPicture = $roomPictureRepository->findWhere(['room_id' => $id])->pluck('image');
         $roomImageResult = [];
         if (!empty($roomPictures)) {
 
@@ -176,8 +133,8 @@ class RoomService extends BaseService
         }
 
         return [
-            'room' => $model,
-            'utilities' => $newUtilityIds,
+            'affected' => $model,
+            'utilities' => $roomAmenities,
             'roomImage' => $roomImageResult
         ];
     }

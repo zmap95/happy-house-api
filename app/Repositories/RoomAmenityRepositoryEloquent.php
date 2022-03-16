@@ -36,13 +36,4 @@ class RoomAmenityRepositoryEloquent extends BaseEloquent implements RoomAmenityR
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
-
-    public function findIdAmenityByRoom(int $roomId)
-    {
-        $this->applyCriteria();
-        $this->applyScope();
-        $model = $this->model->where('room_id', $roomId)->pluck('house_utility_id');
-
-        return $this->parserResult($model);
-    }
 }

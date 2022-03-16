@@ -11,5 +11,4 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 interface RoomPictureRepository extends RepositoryInterface
 {
-    public function findPictureByRoom(int $roomId);
 }
