@@ -133,7 +133,7 @@ class RoomService extends BaseService
         }
 
         return [
-            'affected' => $model,
+            'room' => $model,
             'utilities' => $roomAmenities,
             'roomImage' => $roomImageResult
         ];
