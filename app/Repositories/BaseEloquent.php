@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Repositories\UserRepository;
+use Illuminate\Database\Eloquent\Model;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use App\Entities\User;
@@ -46,5 +47,10 @@ class BaseEloquent extends BaseRepository implements \App\Repositories\BaseRepos
         $this->resetModel();
 
         return $this->parserResult($model);
+    }
+
+    public function createMany(Model $model, array $data, $relation)
+    {
+        return $model->{$relation}()->createMany($data);
     }
 }

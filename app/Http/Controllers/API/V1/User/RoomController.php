@@ -32,7 +32,7 @@ class RoomController extends Controller
     /**
      * @OA\Post(
      *   path="/user/rooms",
-     *   operationId="store",
+     *   operationId="rooms.store",
      *   tags={"[Quản lý phòng] API liên quan đến phòng"},
      *   summary="Thêm mới phòng",
      *   description="Thêm mới phòng",

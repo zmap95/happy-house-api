@@ -87,7 +87,7 @@ class CreateRoomRequest extends FormRequest
 
     /**
      * @OA\Property(
-     *     property="utilities",
+     *     property="amenities",
      *     description="Các tiện ích của phòng(có thẻ để trống)",
      *     @OA\Items(
      *        @OA\Property(
@@ -100,18 +100,18 @@ class CreateRoomRequest extends FormRequest
      *              property="icon",
      *              type="string",
      *              description="icon tiện ích",
-     *              example="{$file} (Hãy cho tôi file)"
+     *              example="class (fontawesome)"
      *        ),
      *
      *     ),
      * )
      * @var array
      */
-    private $utilities;
+    private $amenities;
 
     /**
      * @OA\Property(
-     *     property="newUtilities",
+     *     property="newAmenities",
      *     type="array",
      *     description="thêm các tiện ích của phòng nếu nó chưa nằm trong danh sách chọn (có thể null)",
      *     @OA\Items(
@@ -125,7 +125,7 @@ class CreateRoomRequest extends FormRequest
      *              property="icon",
      *              type="string",
      *              description="icon tiện ích",
-     *              example="{$file} (Hãy cho tôi file)"
+     *              example="class (fontawesome)"
      *        ),
      *
      *     ),
@@ -135,7 +135,7 @@ class CreateRoomRequest extends FormRequest
      * )
      * @var array
      */
-    private $newUtilities;
+    private $newAmenities;
 
     /**
      * @OA\Property(
@@ -179,8 +179,8 @@ class CreateRoomRequest extends FormRequest
             'acreage' => 'bail:required:numeric',
             'amount_of_people' => 'bail|required:integer',
             'deposit' => 'bail:required:numeric',
-            'utilities' => 'sometimes|array',
-            'newUtilities' => 'sometimes|array',
+            'amenities' => 'sometimes|array',
+            'newAmenities' => 'sometimes|array',
             'room_pictures' => 'sometimes|array'
         ];
     }

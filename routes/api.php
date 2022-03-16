@@ -28,6 +28,8 @@ Route::group(['prefix' => 'v1',], function () {
             Route::group(['prefix' => 'houses'], function () {
                 Route::get('/', [\App\Http\Controllers\API\V1\User\HouseController::class, 'index']);
             });
+
+            Route::apiResource('rooms', \App\Http\Controllers\API\V1\User\RoomController::class);
         });
     });
 
