@@ -19,6 +19,9 @@ class HouseSeeder extends Seeder
 
         foreach ($users as $user) {
             $province = rand(1, 63);
+            if ($province == 26){
+                continue;
+            }
             $district = DB::table('districts')->where('province_id', $province)->inRandomOrder()->first();
             $commune = DB::table('communes')->where('district_id', $district->id)->inRandomOrder()->first();
 
