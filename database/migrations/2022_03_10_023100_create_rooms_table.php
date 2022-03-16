@@ -24,6 +24,7 @@ class CreateRoomsTable extends Migration
             $table->double('deposit');
             $table->unsignedInteger('house_id');
             $table->unsignedInteger('user_id');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

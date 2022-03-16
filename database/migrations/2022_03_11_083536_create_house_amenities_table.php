@@ -19,6 +19,7 @@ class CreateHouseAmenitiesTable extends Migration
             $table->string('icon')->nullable();
             $table->string('is_common')->default('common');
             $table->unsignedInteger('house_id');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

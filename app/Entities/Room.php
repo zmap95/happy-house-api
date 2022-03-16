@@ -6,6 +6,7 @@ use App\Services\UploadService;
 use Illuminate\Database\Eloquent\Model;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Room.
@@ -14,7 +15,7 @@ use Prettus\Repository\Traits\TransformableTrait;
  */
 class Room extends Model implements Transformable
 {
-    use TransformableTrait;
+    use TransformableTrait, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -27,11 +28,11 @@ class Room extends Model implements Transformable
     ];
     protected $dateFormat = 'Y-m-d H:i:s';
 
-    public function roomAmenities() {
+    public function amenities() {
         return $this->hasMany(RoomAmenity::class);
     }
 
-    public function roomPictures() {
+    public function pictures() {
         return $this->hasMany(RoomPicture::class);
     }
 
@@ -39,8 +40,8 @@ class Room extends Model implements Transformable
         parent::boot();
 
         static::deleting(function($room) { // before delete() method call this
-            $room->roomAmenities()->delete();
-            $room->roomPictures()->delete();
+            $room->amenities()->delete();
+            $room->pictures()->delete();
             $uploadService = app(UploadService::class);
             $uploadService->deleteDirectory('room-' . $room->id);
         });

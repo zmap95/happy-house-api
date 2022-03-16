@@ -17,6 +17,7 @@ class CreateRoomAmenitiesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('room_id');
             $table->unsignedInteger('house_utility_id');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
