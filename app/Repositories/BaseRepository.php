@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use Illuminate\Database\Eloquent\Model;
 use Prettus\Repository\Contracts\RepositoryInterface;
 
 /**
@@ -13,4 +14,5 @@ interface BaseRepository extends RepositoryInterface
 {
     public function findWhere(array $where, $columns = ['*'], $with = []);
     public function findFirst(array $where, $columns = ['*'], $with = []);
+    public function createMany(Model $model, array $data, $relation);
 }
