@@ -31,13 +31,15 @@ class CreateHouseRequest extends FormRequest
             'province_id' => 'required',
             'district_id' => 'required',
             'commune_id' => 'required',
-            'common_fee' => 'required',
+            'common_fee' => 'in:'.config('constant.house.common_fee.all_room').','
+                .config('constant.house.common_fee.separate'),
             'electricity_per_kwh' => 'nullable',
             'water_per_block' => 'nullable',
             'electricity_closing_date' => 'nullable',
             'water_closing_date' => 'nullable',
             'public_community_status' => 'nullable',
-            'status' => 'required',
+            'status' => 'in:'.config('constant.status.active').','
+                .config('constant.status.inactive'),
             'description' => 'nullable',
             'utilities' => 'nullable',
             'utilities.*.icon' => 'required',

@@ -64,4 +64,5 @@ class HouseRepositoryEloquent extends BaseRepository implements HouseRepository
 
         return $this->parserResult($results);
     }
+
 }

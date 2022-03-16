@@ -17,7 +17,8 @@ class CreateHouseUtilitiesTable extends Migration
 	{
 		Schema::create('house_utilities', function(Blueprint $table) {
             $table->increments('id');
-
+            $table->string('name');
+            $table->string('icon');
             $table->timestamps();
 		});
 	}

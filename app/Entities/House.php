@@ -24,8 +24,8 @@ class House extends Model implements Transformable
      */
     protected $fillable = [
         'name',
-        'category',
-        'type',
+        'category_id',
+        'type_id',
         'address',
         'province_id',
         'district_id',

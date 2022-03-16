@@ -114,13 +114,11 @@ class HouseController extends Controller
         $searchCondition = $request->only([
             'search', 'per_page', 'order_by', 'order_key', 'status', 'category_id'
         ]);
-
         $houses = $this->houseService->getByUser(
             auth()->user()->id,
             $searchCondition,
             ['province', 'district', 'commune', 'category', 'type']
         );
-
         $response = (new ResponseData())->setStatus(true)
             ->setMessage("Lấy thông tin thành công")
             ->setData([
@@ -137,10 +135,23 @@ class HouseController extends Controller
         DB::beginTransaction();
 
         try {
-
+            $houses = $this->houseService->create($request->validated());
             DB::commit();
+
+            $response = (new ResponseData())->setStatus(true)
+                ->setMessage("Thêm nhà  thành công")
+                ->setData($houses)
+                ->getBodyResponse();
+
+            return response()->json($response);
         } catch (\Exception $exception) {
             DB::rollBack();
+
+            $response = (new ResponseData())->setStatus(false)
+                ->setMessage("Thêm nhà không thành công. Đã có lỗi xảy ra.")
+                ->getBodyResponse();
+
+            return response()->json($response);
         }
     }
 }

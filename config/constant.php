@@ -16,6 +16,10 @@ return [
             'all_room' => 'all_room',
             'separate' => 'separate'
         ]
+    ],
+    'status' => [
+        'active' => 'active',
+        'inactive' => 'inactive'
     ]
 
 ];
