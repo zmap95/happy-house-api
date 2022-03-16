@@ -75,4 +75,8 @@ class House extends Model implements Transformable
     {
         return $this->belongsTo(HouseCategory::class);
     }
+
+    public function amenities() {
+        return $this->hasMany(HouseAmenity::class);
+    }
 }
