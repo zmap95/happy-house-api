@@ -130,6 +130,43 @@ class HouseController extends Controller
         return response()->json($response);
     }
 
+    /**
+     * @OA\Post(
+     *      path="/user/houses/store",
+     *      operationId="houses.store",
+     *      tags={"[Quản lý nhà] API liên quan đến nhà"},
+     *      summary="Tạo mới nhà",
+     *      description="Tạo mới nhà",
+     *      security={{"sanctum": {}}},
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(
+     *              ref="#/components/schemas/CreateHouseRequest"
+     *          ),
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *          @OA\JsonContent()
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden",
+     *          @OA\JsonContent()
+     *      )
+     * )
+     */
+
     public function store(CreateHouseRequest $request)
     {
         DB::beginTransaction();
@@ -151,7 +188,7 @@ class HouseController extends Controller
                 ->setMessage("Thêm nhà không thành công. Đã có lỗi xảy ra.")
                 ->getBodyResponse();
 
-            return response()->json($response);
+            return response()->json($exception->getMessage());
         }
     }
 }

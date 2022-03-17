@@ -4,9 +4,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 /**
- * Class CreateHouseUtilitiesTable.
+ * Class CreateHouseRulesTable.
  */
-class CreateHouseUtilitiesTable extends Migration
+class CreateHouseRulesTable extends Migration
 {
 	/**
 	 * Run the migrations.
@@ -15,10 +15,13 @@ class CreateHouseUtilitiesTable extends Migration
 	 */
 	public function up()
 	{
-		Schema::create('house_utilities', function(Blueprint $table) {
+		Schema::create('house_rules', function(Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('icon');
+            $table->string('icon')->nullable();
+            $table->string('is_common')->default('common');
+            $table->unsignedInteger('house_id');
+            $table->softDeletes();
             $table->timestamps();
 		});
 	}
@@ -30,6 +33,6 @@ class CreateHouseUtilitiesTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::drop('house_utilities');
+		Schema::dropIfExists('house_rules');
 	}
 }
