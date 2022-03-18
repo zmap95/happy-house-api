@@ -26,7 +26,7 @@ class UpdateRoomsAddFiledRentalFormTable extends Migration
     public function down()
     {
         Schema::table('rooms', function (Blueprint $table) {
-            $table->dropColumn('rental_form');
+            $table->dropColumn('empty_room_day');
         });
     }
 }
