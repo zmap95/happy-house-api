@@ -14,7 +14,7 @@ class UpdateRoomsAddFiledRentalFormTable extends Migration
     public function up()
     {
         Schema::table('rooms', function (Blueprint $table) {
-           $table->tinyInteger('rental_form');
+           $table->date('empty_room_day')->nullable();
         });
     }
 
