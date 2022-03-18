@@ -189,7 +189,7 @@ class HouseController extends Controller
                 ->setMessage("Thêm nhà không thành công. Đã có lỗi xảy ra.")
                 ->getBodyResponse();
 
-            return response()->json($exception->getMessage());
+            return response()->json($response);
         }
     }
 
@@ -246,7 +246,7 @@ class HouseController extends Controller
                 ->setMessage("Sửa thông tin nhà không thành công. Đã có lỗi xảy ra.")
                 ->getBodyResponse();
 
-            return response()->json($response);
+            return response()->json($exception->getMessage());
         }
     }
 }

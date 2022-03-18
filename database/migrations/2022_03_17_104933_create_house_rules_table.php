@@ -20,6 +20,7 @@ class CreateHouseRulesTable extends Migration
             $table->string('name');
             $table->string('icon')->nullable();
             $table->string('is_common')->default('common');
+            $table->integer('checked')->default(0);
             $table->unsignedInteger('house_id');
             $table->softDeletes();
             $table->timestamps();
