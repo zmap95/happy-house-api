@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateHouseRequest extends FormRequest
+class UpdateHouseRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -15,12 +15,13 @@ class CreateHouseRequest extends FormRequest
     {
         return true;
     }
+
     /**
      *   @OA\Schema(
      *      title="[Quản lý nhà] API liên quan đến nhà",
      *      type="object",
-     *      schema="CreateHouseRequest",
-     *      description="Tạo mới nhà",
+     *      schema="UpdateHouseRequest",
+     *      description="Sửa thông tin nhà",
      *      required={
      *          "name", "category_id", "address", "type_id", "province_id", "district_id",
      *          "commune_id", "commune_id", "common_fee", "water_closing_date",
@@ -113,18 +114,6 @@ class CreateHouseRequest extends FormRequest
      *              type="string"
      *          ),
      *          @OA\Property(
-     *              property="pictures",
-     *              description="Thêm path hình ảnh của nhà",
-     *              type="array",
-     *              @OA\Items(
-     *                  @OA\Property(
-     *                      property="path",
-     *                      type="string",
-     *                      example="/temporary/2022/03/18/bD8620sFoY2X1647573060phpFD16.tmp.png",
-     *                  ),
-     *              ),
-     *          ),
-     *          @OA\Property(
      *              property="utilities",
      *              description="Tiện ích phòng",
      *              type="array",
@@ -170,6 +159,7 @@ class CreateHouseRequest extends FormRequest
     public function rules()
     {
         return [
+            'house_id' => 'bail|required|integer',
             'name' => 'required',
             'category_id' => 'required',
             'type_id' => 'required',
@@ -191,7 +181,7 @@ class CreateHouseRequest extends FormRequest
             'rules' => 'sometimes|array',
             'lat' => 'nullable',
             'lng' => 'nullable',
-            'pictures' => 'nullable|array',
+            'images' => 'nullable|array',
         ];
     }
 }
