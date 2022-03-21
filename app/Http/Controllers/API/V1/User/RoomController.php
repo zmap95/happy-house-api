@@ -94,7 +94,7 @@ class RoomController extends Controller
     /**
      * @OA\Get(
      *   path="/user/rooms/{roomId}",
-     *   operationId="rooms.update",
+     *   operationId="rooms.show",
      *   tags={"[Quản lý phòng] API liên quan đến phòng"},
      *   summary="Chi tiết phòng",
      *   description="Sửa phòng",
