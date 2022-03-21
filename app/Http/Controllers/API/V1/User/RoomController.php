@@ -222,4 +222,35 @@ class RoomController extends Controller
             return response()->json($exception->getMessage());
         }
     }
+
+    /**
+     * @OA\Get(
+     *     path="/user/rooms/house/{houseId}",
+     *     operationId="rooms.getRoomByHouse",
+     *     summary="Danh sách phòng theo nhà",
+     *     description="Danh sách phòng theo nhà",
+     *     tags={"[Quản lý phòng] API liên quan đến phòng"},
+     *     security={{"sanctum": {}}},
+     *     @OA\Parameter(
+     *      name="houseId",
+     *      in="path",
+     *      description="Nhập id của nhà",
+     *      required=true,
+     *    ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation"
+     *      )
+     *
+     * )
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getRoomByHouse($houseId)
+    {
+        $rooms = $this->roomService->findWhere(['house_id' => $houseId], ['*']);
+
+        return new RoomCollection($rooms);
+    }
 }
