@@ -18,7 +18,6 @@ class CreateHouseCategoriesTable extends Migration
 		Schema::create('house_categories', function(Blueprint $table) {
             $table->increments('id');
             $table->string('name')->unique();
-
             $table->timestamps();
 		});
 	}

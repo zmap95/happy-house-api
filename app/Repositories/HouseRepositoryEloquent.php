@@ -41,7 +41,7 @@ class HouseRepositoryEloquent extends BaseRepository implements HouseRepository
         $results = $this->model->where('user_id', $userId);
 
         if (!empty($searchCondition['search'])) {
-            $results = $results->where('name', 'like', '%' . $searchCondition['status'] . '%');
+            $results = $results->where('name', 'like', '%' . $searchCondition['search'] . '%');
         }
 
         if (!empty($searchCondition['status'])) {
@@ -64,4 +64,5 @@ class HouseRepositoryEloquent extends BaseRepository implements HouseRepository
 
         return $this->parserResult($results);
     }
+
 }
