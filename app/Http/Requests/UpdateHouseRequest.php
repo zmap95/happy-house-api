@@ -181,7 +181,7 @@ class UpdateHouseRequest extends FormRequest
             'rules' => 'sometimes|array',
             'lat' => 'nullable',
             'lng' => 'nullable',
-            'images' => 'nullable|array',
+            'pictures' => 'nullable|array',
         ];
     }
 }

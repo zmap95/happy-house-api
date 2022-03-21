@@ -194,7 +194,7 @@ class HouseController extends Controller
     }
 
     /**
-     * @OA\Post(
+     * @OA\Put(
      *   path="/user/houses/{houseId}",
      *   operationId="houses.update",
      *   tags={"[Quản lý phòng] API liên quan đến phòng"},

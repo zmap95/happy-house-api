@@ -75,11 +75,13 @@ class HouseService extends BaseService
         unset($data['rules']);
         unset($data['pictures']);
 
-        $house = $this->repository->update($data, $id);
+
 
         $data_utilities = array();
         $utilitiesRepository = app(HouseAmenityRepository::class);
-        
+        $oldUtilities = $utilitiesRepository->findWhere(['house_id' => $id])->pluck('id');
+        var_dump($oldUtilities);
+        die();
         foreach ($utilities as $k =>$v){
             $v['house_id'] = $id;
             $data_utilities[$k] = $utilitiesRepository->update($v);
@@ -101,12 +103,12 @@ class HouseService extends BaseService
             $v['house_id'] = $id;
             $data_pictures[$k] = $picturesRepository->create($v);
         }
-
+        $house = $this->repository->update($data, $id);
         return [
             'house' => $house,
-            'utilities' => $data_utilities,
-            'rules' => $data_rules,
-            'pictures' => $data_pictures
+//            'utilities' => $data_utilities,
+//            'rules' => $data_rules,
+//            'pictures' => $data_pictures
         ];
     }
 }
