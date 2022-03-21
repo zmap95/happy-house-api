@@ -24,6 +24,8 @@ Route::group(['prefix' => 'v1',], function () {
         Route::group(['middleware' => 'auth:sanctum'], function () {
             Route::put('/change-password', [\App\Http\Controllers\API\V1\AuthController::class, 'changePassword']);
             Route::get('/profile', [\App\Http\Controllers\API\V1\AuthController::class, 'profile']);
+
+            Route::apiResource('houses', \App\Http\Controllers\API\V1\User\HouseController::class);
             Route::group(['prefix' => 'houses'], function () {
                 Route::get('/', [\App\Http\Controllers\API\V1\User\HouseController::class, 'index']);
                 Route::get('/{houseId}/amenities', [\App\Http\Controllers\API\V1\User\HouseAmenityController::class, 'findByHouse']);
