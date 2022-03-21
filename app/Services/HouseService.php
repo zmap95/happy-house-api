@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Entities\HouseAmenity;
 use App\Repositories\HouseAmenityRepository;
 use App\Repositories\HousePictureRepository;
 use App\Repositories\HouseRepository;
@@ -23,9 +24,9 @@ class HouseService extends BaseService
 
     public function create(array $data)
     {
-        $utilities = $data['utilities'];
-        $rules = $data['rules'];
-        $pictures = $data['pictures'];
+        $utilities = !empty($data['utilities']) ? $data['utilities'] : array();
+        $rules = !empty($data['rules']) ? $data['rules'] : array();
+        $pictures = !empty($data['pictures']) ? $data['pictures'] : array();
         unset($data['utilities']);
         unset($data['rules']);
         unset($data['pictures']);
@@ -68,47 +69,83 @@ class HouseService extends BaseService
 
     public function update(array $data, int $id)
     {
-        $utilities = $data['utilities'];
-        $rules = $data['rules'];
-        $pictures = $data['pictures'];
-        unset($data['utilities']);
-        unset($data['rules']);
-        unset($data['pictures']);
-
-
+        $utilities = !empty($data['utilities']) ? $data['utilities'] : array();
+        $edit_utilities = !empty($data['edit_utilities']) ? $data['edit_utilities'] : array();
+        $rules = !empty($data['rules']) ? $data['rules'] : array();
+        $edit_rules = !empty($data['edit_rules']) ? $data['edit_rules'] : array();
+        $pictures = !empty($data['pictures']) ? $data['pictures'] : array();
+        $delete_pictures = !empty($data['delete_pictures']) ? $data['delete_pictures'] : array();
 
         $data_utilities = array();
         $utilitiesRepository = app(HouseAmenityRepository::class);
-        $oldUtilities = $utilitiesRepository->findWhere(['house_id' => $id])->pluck('id');
-        var_dump($oldUtilities);
-        die();
-        foreach ($utilities as $k =>$v){
-            $v['house_id'] = $id;
-            $data_utilities[$k] = $utilitiesRepository->update($v);
+        if (!empty($utilities)){
+            foreach ($utilities as $k =>$v){
+                $v['house_id'] = $id;
+                $data_utilities[$k] = $utilitiesRepository->create($v);
+            }
         }
-
+        if (!empty($edit_utilities)){
+            foreach ($edit_utilities as $k =>$v){
+                if ($v['delete'] == 1){
+                    $utilitiesRepository->delete($v['id']);
+                }else{
+                    unset($v['delete']);
+                    $data_utilities[$k] = $utilitiesRepository->update($v, $v['id']);
+                    $data_utilities[$k]['update'] = 1;
+                }
+            }
+        }
         $data_rules = array();
         $rulesRepository = app(HouseRuleRepository::class);
-        foreach ($rules as $k =>$v){
-            $v['house_id'] = $id;
-            $data_rules[$k] = $rulesRepository->create($v);
+        if (!empty($rules)){
+            foreach ($rules as $k =>$v){
+                $v['house_id'] = $id;
+                $data_rules[$k] = $rulesRepository->create($v);
+            }
+        }
+        if (!empty($edit_rules)){
+            foreach ($edit_rules as $k =>$v){
+                if ($v['delete'] == 1){
+                    $rulesRepository->delete($v['id']);
+                }else{
+                    unset($v['delete']);
+                    $data_rules[$k] = $rulesRepository->update($v, $v['id']);
+                    $data_rules[$k]['update'] = 1;
+                }
+            }
         }
 
         $data_pictures = array();
         $picturesRepository = app(HousePictureRepository::class);
 
-        foreach ($pictures as $k =>$v){
-            $folder = 'house-' . $id;
-            $v['image'] = $this->uploadService->realUpload($folder, $v['path']);
-            $v['house_id'] = $id;
-            $data_pictures[$k] = $picturesRepository->create($v);
+        if (!empty($pictures)){
+            foreach ($pictures as $k =>$v){
+                $folder = 'house-' . $id;
+                $v['image'] = $this->uploadService->realUpload($folder, $v['path']);
+                $v['house_id'] = $id;
+                $data_pictures[$k] = $picturesRepository->create($v);
+            }
         }
+        if (!empty($delete_pictures)){
+            foreach ($delete_pictures as $k =>$v){
+                $this->uploadService->deleleFile([$v['path']]);
+                $picturesRepository->delete($v['id']);
+            }
+        }
+        unset($data['utilities']);
+        unset($data['edit_utilities']);
+        unset($data['rules']);
+        unset($data['edit_rules']);
+        unset($data['pictures']);
+        unset($data['delete_pictures']);
+
         $house = $this->repository->update($data, $id);
+
         return [
             'house' => $house,
-//            'utilities' => $data_utilities,
-//            'rules' => $data_rules,
-//            'pictures' => $data_pictures
+            'utilities' => $data_utilities,
+            'rules' => $data_rules,
+            'pictures' => $data_pictures
         ];
     }
 }

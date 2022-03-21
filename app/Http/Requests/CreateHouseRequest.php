@@ -126,7 +126,7 @@ class CreateHouseRequest extends FormRequest
      *          ),
      *          @OA\Property(
      *              property="utilities",
-     *              description="Tiện ích phòng",
+     *              description="Tiện ích nhà",
      *              type="array",
      *              @OA\Items(
      *                  @OA\Property(
@@ -145,7 +145,7 @@ class CreateHouseRequest extends FormRequest
      *          ),
      *          @OA\Property(
      *              property="rules",
-     *              description="Nội quy phòng",
+     *              description="Nội quy nhà",
      *              type="array",
      *              @OA\Items(
      *                  @OA\Property(

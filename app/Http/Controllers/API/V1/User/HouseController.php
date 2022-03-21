@@ -197,9 +197,9 @@ class HouseController extends Controller
      * @OA\Put(
      *   path="/user/houses/{houseId}",
      *   operationId="houses.update",
-     *   tags={"[Quản lý phòng] API liên quan đến phòng"},
-     *   summary="Sửa phòng",
-     *   description="Sửa phòng",
+     *   tags={"[Quản lý nhà] API liên quan đến nhà"},
+     *   summary="Sửa nhà",
+     *   description="Sửa nhà",
      *   security={{"sanctum": {}}},
      *   @OA\RequestBody(
      *      required=true,
@@ -246,6 +246,52 @@ class HouseController extends Controller
                 ->setMessage("Sửa thông tin nhà không thành công. Đã có lỗi xảy ra.")
                 ->getBodyResponse();
 
+            return response()->json($response);
+        }
+    }
+
+    /**
+     * @OA\Delete(
+     *   path="/user/houses/{houseId}",
+     *   operationId="houses.destroy",
+     *   tags={"[Quản lý nhà] API liên quan đến nhà"},
+     *   summary="Xóa nhà",
+     *   description="Xóa nhà",
+     *   security={{"sanctum": {}}},
+     *   @OA\Parameter(
+     *      name="houseId",
+     *      in="path",
+     *      description="Nhập id của nhà",
+     *      required=true,
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Successful operation"
+     *   )
+     * )
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        DB::beginTransaction();
+        try {
+
+            $houses = $this->houseService->delete($id);
+            DB::commit();
+            $response = (new ResponseData())->setStatus(true)
+                ->setMessage('Xóa thành công!')
+                ->setData(['affected' => $houses])
+                ->getBodyResponse();
+            return response()->json($response);
+
+        }catch (\Exception $exception){
+            DB::rollBack();
+            $response = (new ResponseData())->setStatus(false)
+                ->setMessage('Xóa không thành công!')
+                ->getBodyResponse();
             return response()->json($exception->getMessage());
         }
     }

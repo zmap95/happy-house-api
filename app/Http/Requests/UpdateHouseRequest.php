@@ -18,7 +18,7 @@ class UpdateHouseRequest extends FormRequest
 
     /**
      *   @OA\Schema(
-     *      title="[Quản lý nhà] API liên quan đến nhà",
+     *      title="House request",
      *      type="object",
      *      schema="UpdateHouseRequest",
      *      description="Sửa thông tin nhà",
@@ -114,10 +114,59 @@ class UpdateHouseRequest extends FormRequest
      *              type="string"
      *          ),
      *          @OA\Property(
-     *              property="utilities",
-     *              description="Tiện ích phòng",
+     *              property="delete_pictures",
+     *              description="Các hình ảnh của nhà bị xóa",
      *              type="array",
      *              @OA\Items(
+     *                  @OA\Property(
+     *                      property="id",
+     *                      type="integer",
+     *                      description="ID ảnh của nhà",
+     *                      example="1",
+     *                  ),
+     *                  @OA\Property(
+     *                      property="path",
+     *                      type="string",
+     *                      description="path ảnh của nhà",
+     *                      example="/temporary/2022/03/18/bD8620sFoY2X1647573060phpFD16.tmp.png",
+     *                  ),
+     *              ),
+     *          ),
+     *          @OA\Property(
+     *              property="pictures",
+     *              description="Thêm hình ảnh của nhà",
+     *              type="array",
+     *              @OA\Items(
+     *                  @OA\Property(
+     *                      property="path",
+     *                      type="string",
+     *                      example="/temporary/2022/03/18/bD8620sFoY2X1647573060phpFD16.tmp.png",
+     *                  ),
+     *              ),
+     *          ),
+     *          @OA\Property(
+     *              property="edit_utilities",
+     *              description="Danh sách Tiện ích phòng chỉnh sửa/xóa",
+     *              type="array",
+     *              @OA\Items(
+     *                  @OA\Property(
+     *                      property="id",
+     *                      type="integer",
+     *                      description="id tiện ích",
+     *                      example=1
+     *                  ),
+     *                  @OA\Property(
+     *                      property="delete",
+     *                      type="integer",
+     *                      description="Trạngthasi có phải id bị xóa hay không. 0:chỉnh sửa, 1:xóa",
+     *                      example=1
+     *                  ),
+     *                  @OA\Property(
+     *                      property="checked",
+     *                      type="integer",
+     *                      description="Trạng thái checked. 0: not checked / 1:checked",
+     *                      example=1
+     *                  ),
      *                  @OA\Property(
      *                      property="name",
      *                      type="string",
@@ -133,8 +182,64 @@ class UpdateHouseRequest extends FormRequest
      *              ),
      *          ),
      *          @OA\Property(
+     *              property="utilities",
+     *              description="Tiện ích nhà",
+     *              type="array",
+     *              @OA\Items(
+     *                  @OA\Property(
+     *                      property="name",
+     *                      type="string",
+     *                      description="Tên tiện ích",
+     *                      example="Đồng hồ treo cầu thang"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="icon",
+     *                      type="string",
+     *                      description="icon tiện ích",
+     *                      example="fa-alarm-clock"
+     *                  ),
+     *              ),
+     *          ),
+     *          @OA\Property(
+     *              property="edit_rules",
+     *              description="Nội quy nhà chỉnh sửa/xóa",
+     *              type="array",
+     *              @OA\Items(
+     *                  @OA\Property(
+     *                      property="id",
+     *                      type="integer",
+     *                      description="id Nội quy nhà",
+     *                      example=1
+     *                  ),
+     *                  @OA\Property(
+     *                      property="delete",
+     *                      type="integer",
+     *                      description="Trạng thái có phải id bị xóa hay không. 0:chỉnh sửa, 1:xóa",
+     *                      example=1
+     *                  ),
+     *                  @OA\Property(
+     *                      property="checked",
+     *                      type="integer",
+     *                      description="Trạng thái checked. 0: not checked / 1:checked",
+     *                      example=1
+     *                  ),
+     *                  @OA\Property(
+     *                      property="name",
+     *                      type="string",
+     *                      description="Tên Nội quy",
+     *                      example="Về trước 24h"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="icon",
+     *                      type="string",
+     *                      description="Icon Nội quy",
+     *                      example="fa-alarm-exclamation"
+     *                  ),
+     *              ),
+     *          ),
+     *          @OA\Property(
      *              property="rules",
-     *              description="Nội quy phòng",
+     *              description="Nội quy nhà được thêm mới",
      *              type="array",
      *              @OA\Items(
      *                  @OA\Property(
@@ -159,7 +264,6 @@ class UpdateHouseRequest extends FormRequest
     public function rules()
     {
         return [
-            'house_id' => 'bail|required|integer',
             'name' => 'required',
             'category_id' => 'required',
             'type_id' => 'required',
@@ -181,7 +285,10 @@ class UpdateHouseRequest extends FormRequest
             'rules' => 'sometimes|array',
             'lat' => 'nullable',
             'lng' => 'nullable',
-            'pictures' => 'nullable|array',
+            'pictures' => 'sometimes|array',
+            'delete_pictures' => 'sometimes|array',
+            'edit_utilities' => 'sometimes|array',
+            'edit_rules' => 'sometimes|array'
         ];
     }
 }

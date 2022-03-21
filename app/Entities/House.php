@@ -5,6 +5,7 @@ namespace App\Entities;
 use Database\Factories\HouseFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
@@ -15,7 +16,7 @@ use Prettus\Repository\Traits\TransformableTrait;
  */
 class House extends Model implements Transformable
 {
-    use  HasFactory, TransformableTrait;
+    use  HasFactory, TransformableTrait, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
