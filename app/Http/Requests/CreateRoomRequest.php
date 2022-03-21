@@ -20,7 +20,7 @@ class CreateRoomRequest extends FormRequest
      *     description="Ngày phòng trống",
      *     example="2014-02-26"
      * )
-     * @var integer
+     * @var string
      */
     private $empty_room_day;
 
@@ -181,7 +181,7 @@ class CreateRoomRequest extends FormRequest
     public function rules()
     {
         return [
-            'empty_room_day' => 'bail|required|date',
+            'empty_room_day' => 'bail|nullable|date',
             'house_id' => 'bail|required|integer',
             'room_name' => 'bail|required',
             'floor' => 'bail|required',
