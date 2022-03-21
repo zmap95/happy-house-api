@@ -4,9 +4,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 /**
- * Class CreateHouseCategoriesTable.
+ * Class CreateHousePicturesTable.
  */
-class CreateHouseCategoriesTable extends Migration
+class CreateHousePicturesTable extends Migration
 {
 	/**
 	 * Run the migrations.
@@ -15,9 +15,10 @@ class CreateHouseCategoriesTable extends Migration
 	 */
 	public function up()
 	{
-		Schema::create('house_categories', function(Blueprint $table) {
+		Schema::create('house_pictures', function(Blueprint $table) {
             $table->increments('id');
-            $table->string('name')->unique();
+            $table->string('image');
+            $table->unsignedInteger('house_id');
             $table->timestamps();
 		});
 	}
@@ -29,6 +30,6 @@ class CreateHouseCategoriesTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::drop('house_categories');
+		Schema::dropIfExists('house_pictures');
 	}
 }
