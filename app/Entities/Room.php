@@ -9,7 +9,7 @@ use Prettus\Repository\Traits\TransformableTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * Class Room.
+ * Class RoomCollection.
  *
  * @package namespace App\Entities;
  */

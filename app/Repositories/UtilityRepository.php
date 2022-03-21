@@ -5,10 +5,11 @@ namespace App\Repositories;
 use Prettus\Repository\Contracts\RepositoryInterface;
 
 /**
- * Interface HouseAmenityRepository.
+ * Interface UtilityRepository.
  *
  * @package namespace App\Repositories;
  */
-interface HouseAmenityRepository extends RepositoryInterface
+interface UtilityRepository extends RepositoryInterface
 {
+    //
 }

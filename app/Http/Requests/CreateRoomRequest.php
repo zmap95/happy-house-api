@@ -6,14 +6,23 @@ use Illuminate\Foundation\Http\FormRequest;
 
 /**
  *   @OA\Schema(
- *      title="Room request",
+ *      title="RoomCollection request",
  *      type="object",
- *      description="Room request body data",
- *      required={"house_id", "room_name", "floor", "price", "acreage", "amount_of_people", "deposit"}
+ *      description="RoomCollection request body data",
+ *      required={"empty_room_day", "house_id", "room_name", "floor", "price", "acreage", "amount_of_people", "deposit"}
  *   )
  */
 class CreateRoomRequest extends FormRequest
 {
+    /**
+     * @OA\Property(
+     *     title="empty_room_day",
+     *     description="Ngày phòng trống",
+     *     example="2014-02-26"
+     * )
+     * @var integer
+     */
+    private $empty_room_day;
 
     /**
      * @OA\Property(
@@ -172,6 +181,7 @@ class CreateRoomRequest extends FormRequest
     public function rules()
     {
         return [
+            'empty_room_day' => 'bail|required|date',
             'house_id' => 'bail|required|integer',
             'room_name' => 'bail|required',
             'floor' => 'bail|required',
