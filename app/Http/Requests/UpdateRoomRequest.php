@@ -6,9 +6,9 @@ use Illuminate\Foundation\Http\FormRequest;
 
 /**
  *   @OA\Schema(
- *      title="Room request",
+ *      title="RoomCollection request",
  *      type="object",
- *      description="Room request body data",
+ *      description="RoomCollection request body data",
  *      required={"empty_room_day", "room_name", "floor", "price", "acreage", "amount_of_people", "deposit"}
  *   )
  */

@@ -6,6 +6,8 @@ use App\Helps\ResponseData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateRoomRequest;
 use App\Http\Requests\UpdateRoomRequest;
+use App\Http\Resources\RoomCollection;
+use App\Http\Resources\RoomResource;
 use App\Services\RoomService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,13 +22,28 @@ class RoomController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *     path="/user/rooms",
+     *     operationId="rooms.index",
+     *     summary="Danh sách phòng",
+     *     description="Danh sách phòng",
+     *     tags={"[Quản lý phòng] API liên quan đến phòng"},
+     *     security={{"sanctum": {}}},
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation"
+     *      )
+     *
+     * )
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        //
+        $rooms = $this->roomService->findWhere([], ['*']);
+
+        return new RoomCollection($rooms);
     }
 
     /**
@@ -39,9 +56,9 @@ class RoomController extends Controller
      *   security={{"sanctum": {}}},
      *   @OA\RequestBody(
      *     required=true,
-     *          @OA\JsonContent(
-     *              ref="#/components/schemas/CreateRoomRequest"
-     *          )
+     *        @OA\JsonContent(
+     *            ref="#/components/schemas/CreateRoomRequest"
+     *        )
      *   ),
      *   @OA\Response(
      *     response=200,
@@ -75,6 +92,24 @@ class RoomController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *   path="/user/rooms/{roomId}",
+     *   operationId="rooms.update",
+     *   tags={"[Quản lý phòng] API liên quan đến phòng"},
+     *   summary="Chi tiết phòng",
+     *   description="Sửa phòng",
+     *   security={{"sanctum": {}}},
+     *   @OA\Parameter(
+     *      name="roomId",
+     *      in="path",
+     *      description="Nhập id của phòng",
+     *      required=true,
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Successful operation"
+     *   )
+     * )
      * Display the specified resource.
      *
      * @param  int  $id
@@ -82,7 +117,9 @@ class RoomController extends Controller
      */
     public function show($id)
     {
-        //
+        $room = $this->roomService->find($id);
+
+        return new RoomResource($room);
     }
 
     /**

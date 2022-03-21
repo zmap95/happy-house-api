@@ -27,9 +27,18 @@ Route::group(['prefix' => 'v1',], function () {
 
             Route::group(['prefix' => 'houses'], function () {
                 Route::get('/', [\App\Http\Controllers\API\V1\User\HouseController::class, 'index']);
+                Route::get('/{houseId}/amenities', [\App\Http\Controllers\API\V1\User\HouseAmenityController::class, 'findByHouse']);
+            });
+
+            Route::group(['prefix' => 'fee'], function () {
+                Route::get('/categories', [\App\Http\Controllers\API\V1\User\FeeCategoryController::class, 'getFeeCategory']);
             });
 
             Route::apiResource('rooms', \App\Http\Controllers\API\V1\User\RoomController::class);
+
+            Route::apiResource('pricelist', \App\Http\Controllers\API\V1\User\PriceListController::class);
+
+            Route::get('/utilities', [\App\Http\Controllers\API\V1\User\UtilityController::class, 'index'])->name('utilities.index');
         });
     });
 

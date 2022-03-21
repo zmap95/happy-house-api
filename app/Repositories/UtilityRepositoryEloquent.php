@@ -4,16 +4,16 @@ namespace App\Repositories;
 
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
-use App\Repositories\HouseAmenityRepository;
-use App\Entities\HouseAmenity;
-use App\Validators\HouseAmenityValidator;
+use App\Repositories\UtilityRepository;
+use App\Entities\Utility;
+use App\Validators\UtilityValidator;
 
 /**
- * Class HouseAmenityRepositoryEloquent.
+ * Class UtilityRepositoryEloquent.
  *
  * @package namespace App\Repositories;
  */
-class HouseAmenityRepositoryEloquent extends BaseEloquent implements HouseAmenityRepository
+class UtilityRepositoryEloquent extends BaseRepository implements UtilityRepository
 {
     /**
      * Specify Model class name
@@ -22,10 +22,10 @@ class HouseAmenityRepositoryEloquent extends BaseEloquent implements HouseAmenit
      */
     public function model()
     {
-        return HouseAmenity::class;
+        return Utility::class;
     }
 
-
+    
 
     /**
      * Boot up the repository, pushing criteria
@@ -34,4 +34,5 @@ class HouseAmenityRepositoryEloquent extends BaseEloquent implements HouseAmenit
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
+    
 }
