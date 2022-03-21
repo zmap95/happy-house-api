@@ -26,7 +26,8 @@ class RoomResource extends JsonResource
             'deposit' => $this->deposit,
             'amenities' => $this->amenities,
             'newAmenities' => $this->newAmenities,
-            'room_pictures' => $this->room_pictures
+            'room_pictures' => $this->room_pictures,
+            'status' => $this->status
         ];
     }
 }

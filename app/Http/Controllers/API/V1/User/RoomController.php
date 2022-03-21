@@ -6,6 +6,7 @@ use App\Helps\ResponseData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateRoomRequest;
 use App\Http\Requests\UpdateRoomRequest;
+use App\Http\Resources\PaginationResource;
 use App\Http\Resources\RoomCollection;
 use App\Http\Resources\RoomResource;
 use App\Services\RoomService;
@@ -41,9 +42,17 @@ class RoomController extends Controller
      */
     public function index()
     {
-        $rooms = $this->roomService->findWhere([], ['*']);
+        $rooms = $this->roomService->paginate();
 
-        return new RoomCollection($rooms);
+        $response = (new ResponseData())->setStatus(true)
+            ->setMessage('Lấy dữ liệu thành công')
+            ->setData([
+               'rooms' => new RoomCollection($rooms),
+               'pagination' => new PaginationResource($rooms)
+            ])
+            ->getBodyResponse();
+
+        return $response;
     }
 
     /**

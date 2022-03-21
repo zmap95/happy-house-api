@@ -20,7 +20,7 @@ class UpdateRoomRequest extends FormRequest
      *     description="Ngày phòng trống",
      *     example="2014-02-26"
      * )
-     * @var integer
+     * @var string
      */
     private $empty_room_day;
 

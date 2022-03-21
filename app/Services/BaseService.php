@@ -28,4 +28,8 @@ class BaseService {
     public function delete(int $id) {
         return $this->repository->delete($id);
     }
+
+    public function paginate($limit = null, $column = ['*']) {
+        return $this->repository->paginate($limit, $column);
+    }
 }
