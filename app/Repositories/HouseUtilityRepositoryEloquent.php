@@ -25,14 +25,14 @@ class HouseUtilityRepositoryEloquent extends BaseRepository implements HouseUtil
         return HouseUtility::class;
     }
 
-    
+
 
     /**
      * Boot up the repository, pushing criteria
-     */
+     */ 
     public function boot()
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
-    
+
 }
