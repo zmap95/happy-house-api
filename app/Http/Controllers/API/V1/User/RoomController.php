@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\V1\User;
 
+use App\Entities\Room;
 use App\Helps\ResponseData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateRoomRequest;
@@ -234,17 +235,31 @@ class RoomController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/user/rooms/house/{houseId}",
+     *     path="/user/rooms/list/house",
      *     operationId="rooms.getRoomByHouse",
      *     summary="Danh sách phòng theo nhà",
      *     description="Danh sách phòng theo nhà",
      *     tags={"[Quản lý phòng] API liên quan đến phòng"},
      *     security={{"sanctum": {}}},
      *     @OA\Parameter(
-     *      name="houseId",
-     *      in="path",
-     *      description="Nhập id của nhà",
+     *      name="limit",
+     *      in="query",
+     *      description="số lượng hiển thị",
      *      required=true,
+     *      example=10
+     *    ),
+     *     @OA\Parameter(
+     *      name="house_id",
+     *      in="query",
+     *      description="Nhập id của nhà",
+     *      required=false,
+     *    ),
+     *     @OA\Parameter(
+     *      name="page",
+     *      in="query",
+     *      description="số trang",
+     *      required=false,
+     *      example=1
      *    ),
      *      @OA\Response(
      *          response=200,
@@ -256,10 +271,19 @@ class RoomController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getRoomByHouse($houseId)
+    public function getRoomByHouse(Request $request)
     {
-        $rooms = $this->roomService->findWhere(['house_id' => $houseId], ['*']);
+        $where = $request->except(['limit', 'page']);
+        $limit = $request->query('limit');
+        $rooms = $this->roomService->paginate($limit, ['*'], $where);
+        $response = (new ResponseData())->setStatus(true)
+            ->setMessage('Lấy dữ liệu thành công')
+            ->setData([
+                'rooms' => new RoomCollection($rooms),
+                'pagination' => new PaginationResource($rooms)
+            ])
+            ->getBodyResponse();
 
-        return new RoomCollection($rooms);
+        return response()->json($response);
     }
 }

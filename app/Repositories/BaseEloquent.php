@@ -53,4 +53,17 @@ class BaseEloquent extends BaseRepository implements \App\Repositories\BaseRepos
     {
         return $model->{$relation}()->createMany($data);
     }
+
+    public function paginate($limit = null, $columns = ['*'], $where = [])
+    {
+        $this->applyCriteria();
+        $this->applyScope();
+        $this->applyConditions($where);
+
+        $model = $this->model->paginate($limit, $columns);
+        $this->resetModel();
+
+        return $this->parserResult($model);
+    }
+
 }

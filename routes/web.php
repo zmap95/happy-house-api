@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-   $c = collect([['name' => 'abc', 'age' => 12], ['name' => 'kien', 'age' => 13]]);
-    dd($c->forget());
+   $room = \App\Entities\Room::where(['id' => 1, 'room_name' => 'Số phòng 1'])->get();
+
+   dd($room);
+
 });

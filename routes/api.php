@@ -35,9 +35,7 @@ Route::group(['prefix' => 'v1',], function () {
             });
 
             Route::apiResource('rooms', \App\Http\Controllers\API\V1\User\RoomController::class);
-            Route::get('/rooms/house/{houseId}', [\App\Http\Controllers\API\V1\User\RoomController::class, 'getRoomByHouse']);
-
-
+            Route::get('/rooms/list/house', [\App\Http\Controllers\API\V1\User\RoomController::class, 'getRoomByHouse'])->name('rooms.getRoomByHouse');
 
             Route::apiResource('pricelist', \App\Http\Controllers\API\V1\User\PriceListController::class);
 

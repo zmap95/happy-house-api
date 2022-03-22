@@ -29,7 +29,7 @@ class BaseService {
         return $this->repository->delete($id);
     }
 
-    public function paginate($limit = null, $column = ['*']) {
-        return $this->repository->paginate($limit, $column);
+    public function paginate($limit = null, $column = ['*'], $where = []) {
+        return $this->repository->paginate($limit, $column, $where);
     }
 }

@@ -13,7 +13,7 @@ use App\Validators\RoomValidator;
  *
  * @package namespace App\Repositories;
  */
-class RoomRepositoryEloquent extends BaseRepository implements RoomRepository
+class RoomRepositoryEloquent extends BaseEloquent implements RoomRepository
 {
     /**
      * Specify Model class name
@@ -25,7 +25,7 @@ class RoomRepositoryEloquent extends BaseRepository implements RoomRepository
         return Room::class;
     }
 
-    
+
 
     /**
      * Boot up the repository, pushing criteria
@@ -34,5 +34,5 @@ class RoomRepositoryEloquent extends BaseRepository implements RoomRepository
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
-    
+
 }
