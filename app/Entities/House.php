@@ -80,4 +80,8 @@ class House extends Model implements Transformable
     public function amenities() {
         return $this->hasMany(HouseAmenity::class);
     }
+
+    public function rules() {
+        return $this->hasMany(HouseRule::class);
+    }
 }

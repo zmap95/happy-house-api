@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateHouseRequest;
 use App\Http\Requests\UpdateHouseRequest;
 use App\Http\Resources\HouseCollection;
+use App\Http\Resources\HouseResource;
 use App\Http\Resources\PaginationResource;
 use App\Http\Resources\UserResource;
 use App\Services\HouseService;
@@ -194,6 +195,52 @@ class HouseController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *   path="/user/houses/{houseId}",
+     *   operationId="houses.show",
+     *   tags={"[Quản lý nhà] API liên quan đến nhà"},
+     *   summary="Thông tin chi tiết nhà",
+     *   description="Lấy thông tin thông tin nhà",
+     *   security={{"sanctum": {}}},
+     *   @OA\Parameter(
+     *      name="houseId",
+     *      in="path",
+     *      description="Nhập id của nhà",
+     *      required=true,
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Successful operation"
+     *   )
+     * )
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+
+    public function show($id)
+    {
+        try {
+            $houses = $this->houseService->find($id);
+            $houses = new HouseResource($houses);
+            $response = (new ResponseData())->setStatus(true)
+                ->setMessage("Lấy thông tin nhà  thành công")
+                ->setData(['houses' => $houses])
+                ->getBodyResponse();
+
+            return response()->json($response);
+        } catch (\Exception $exception) {
+            DB::rollBack();
+
+            $response = (new ResponseData())->setStatus(false)
+                ->setMessage("Lấy thông tin nhà không thành công")
+                ->getBodyResponse();
+
+            return response()->json($response);
+        }
+    }
+    /**
      * @OA\Put(
      *   path="/user/houses/{houseId}",
      *   operationId="houses.update",
@@ -224,6 +271,7 @@ class HouseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
 
     public function update(UpdateHouseRequest $request, $id)
     {

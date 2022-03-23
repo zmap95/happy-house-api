@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Entities\HouseRule;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class HouseResource extends JsonResource
@@ -31,6 +32,8 @@ class HouseResource extends JsonResource
             'public_community_status' => $this->public_community_status,
             'status' => $this->status,
             'description' => $this->description,
+            'amenities' => HouseAmenitieResource::collection($this->amenities),
+            'rules' => HouseRuleResource::collection($this->rules),
         ];
     }
 }
