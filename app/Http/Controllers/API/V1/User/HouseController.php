@@ -199,8 +199,8 @@ class HouseController extends Controller
      *   path="/user/houses/{houseId}",
      *   operationId="houses.show",
      *   tags={"[Quản lý nhà] API liên quan đến nhà"},
-     *   summary="Chi tiết nhà",
-     *   description="Lấy thông tin nhà",
+     *   summary="Thông tin chi tiết nhà",
+     *   description="Lấy thông tin thông tin nhà",
      *   security={{"sanctum": {}}},
      *   @OA\Parameter(
      *      name="houseId",
@@ -221,10 +221,9 @@ class HouseController extends Controller
 
     public function show($id)
     {
-
         try {
             $houses = $this->houseService->find($id);
-            $houses =  new HouseResource($houses);
+            $houses = new HouseResource($houses);
             $response = (new ResponseData())->setStatus(true)
                 ->setMessage("Lấy thông tin nhà  thành công")
                 ->setData(['houses' => $houses])
